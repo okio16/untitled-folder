@@ -7,6 +7,9 @@ import { Pawn } from "../../models/Pawn";
 import { PieceType, TeamType } from "../../Types";
 import Chessboard from "../Chessboard/Chessboard";
 
+
+
+
 export default function Referee() {
     const [board, setBoard] = useState<Board>(initialBoard.clone());
     const [promotionPawn, setPromotionPawn] = useState<Piece>();
@@ -15,6 +18,7 @@ export default function Referee() {
 
     function playMove(playedPiece: Piece, destination: Position): boolean {
         // If the playing piece doesn't have any moves return
+       
         if (playedPiece.possibleMoves === undefined) return false;
 
         // Prevent the inactive team from playing

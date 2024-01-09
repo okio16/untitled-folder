@@ -101,10 +101,17 @@ export class Board {
                 return getPossibleQueenMoves(piece, boardState);
             case PieceType.KING:
                 return getPossibleKingMoves(piece, boardState);
-            case PieceType.PRINCE:
-                return getPossiblePrinceMoves(piece, boardState);
-            case PieceType.PRINCESS:
-                return getPossiblePrincessMoves(piece, boardState);    
+             case PieceType.PRINCE:
+                if (this.totalTurns >= 80) {
+                    return getPossibleKingMoves(piece, boardState);
+                } 
+                    return getPossiblePrinceMoves(piece, boardState); 
+    
+              case PieceType.PRINCESS:
+                    if (this.totalTurns >= 80) {
+                        return getPossibleQueenMoves(piece, boardState);
+                    } 
+                     return getPossiblePrincessMoves(piece, boardState);
             default:
                 return [];
         }

@@ -46,6 +46,9 @@ export class Piece {
     get isPrince() : boolean {
         return this.type === PieceType.PRINCE
     }
+    get isRetiredKing() : boolean {
+        return this.type === PieceType.PRINCE
+    }
 
     get isPrincess() : boolean {
         return this.type === PieceType.PRINCESS

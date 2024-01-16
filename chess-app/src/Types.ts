@@ -7,6 +7,7 @@ export enum PieceType {
     PRINCESS = 'princess',
     PRINCE = 'prince',
     KING = 'king',
+    RETIREDKING = 'retiredking',
 }
 
 export enum TeamType {

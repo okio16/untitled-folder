@@ -3,7 +3,6 @@ import { initialBoard } from "../../Constants";
 import { Piece, Position } from "../../models";
 import { Board } from "../../models/Board";
 import { Pawn } from "../../models/Pawn";
-// import { bishopMove, kingMove, knightMove, pawnMove, queenMove, rookMove, princeMove, princessMove } from "../../referee/rules";
 import { PieceType, TeamType } from "../../Types";
 import Chessboard from "../Chessboard/Chessboard";
 

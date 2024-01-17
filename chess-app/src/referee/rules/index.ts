@@ -6,3 +6,4 @@ export * from "./QueenRules";
 export * from "./PrincessRules";
 export * from "./PrinceRules";
 export * from "./KingRules";
+export * from "./RetiredKingRules"

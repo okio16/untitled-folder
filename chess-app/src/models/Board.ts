@@ -1,4 +1,4 @@
-import { getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves, getCastlingMoves, getPossiblePrincessMoves, getPossiblePrinceMoves } from "../referee/rules";
+import { getPossibleBishopMoves, getPossibleKingMoves, getPossibleKnightMoves, getPossiblePawnMoves, getPossibleQueenMoves, getPossibleRookMoves, getCastlingMoves, getPossiblePrincessMoves, getPossiblePrinceMoves, getPossibleRetiredKingMoves } from "../referee/rules";
 import { PieceType, TeamType } from "../Types";
 import { Pawn } from "./Pawn";
 import { Piece } from "./Piece";
@@ -99,7 +99,10 @@ export class Board {
                 return getPossibleRookMoves(piece, boardState);
             case PieceType.QUEEN:
                 return getPossibleQueenMoves(piece, boardState);
-            case PieceType.KING:
+            case PieceType.KING: 
+            if ( this.totalTurns >= 10) {
+                return getPossibleRetiredKingMoves(piece, boardState);
+            } 
                 return getPossibleKingMoves(piece, boardState);
              case PieceType.PRINCE:
                 if ( this.totalTurns >= 80) {
@@ -115,6 +118,7 @@ export class Board {
             default:
                 return [];
         }
+        
     }
 
     playMove(enPassantMove: boolean,

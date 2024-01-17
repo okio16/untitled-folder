@@ -105,6 +105,7 @@ export const getPossibleRetiredKingMoves = (retiredking: Piece, boardstate: Piec
     } else {
       break;
     }
+
   }
 
   // Upper right movement

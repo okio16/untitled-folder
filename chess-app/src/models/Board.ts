@@ -66,7 +66,7 @@ export class Board {
 
                 // Get the king of the cloned board
                 const clonedKing = simulatedBoard.pieces.find(p => p.isKing && p.team === simulatedBoard.currentTeam)!;
-
+                const clonedretiredKing = simulatedBoard.pieces.find(p => p.isRetiredKing && p.team === simulatedBoard.currentTeam)!;
                 // Loop through all enemy pieces, update their possible moves
                 // And check if the current team's king will be in danger
                 for (const enemy of simulatedBoard.pieces.filter(p => p.team !== simulatedBoard.currentTeam)) {
@@ -74,14 +74,15 @@ export class Board {
 
                     if (enemy.isPawn) {
                         if (enemy.possibleMoves.some(m => m.x !== enemy.position.x
-                            && m.samePosition(clonedKing.position))) {
+                            && m.samePosition(clonedKing.position &&  clonedretiredKing.position))) {
                             piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
                         }
                     } else {
-                        if (enemy.possibleMoves.some(m => m.samePosition(clonedKing.position))) {
+                        if (enemy.possibleMoves.some(m => m.samePosition(clonedKing.position && clonedretiredKing.position))) {
                             piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
                         }
                     }
+            
                 }
             }
         }

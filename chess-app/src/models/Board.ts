@@ -112,7 +112,7 @@ export class Board {
                     return getPossiblePrinceMoves(piece, boardState); 
     
               case PieceType.PRINCESS:
-                    if (this.totalTurns >= 80) {
+                    if (this.totalTurns >= 10) {
                         return getPossibleQueenMoves(piece, boardState);
                     } 
                      return getPossiblePrincessMoves(piece, boardState);

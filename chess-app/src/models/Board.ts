@@ -71,22 +71,24 @@ export class Board {
                 // And check if the current team's king will be in danger
                 for (const enemy of simulatedBoard.pieces.filter(p => p.team !== simulatedBoard.currentTeam)) {
                     enemy.possibleMoves = simulatedBoard.getValidMoves(enemy, simulatedBoard.pieces);
-
+               
                     if (enemy.isPawn) {
                         if (enemy.possibleMoves.some(m => m.x !== enemy.position.x
-                            && m.samePosition(clonedKing.position &&  clonedretiredKing.position))) {
+                            && m.samePosition(clonedKing.position && clonedretiredKing.position ))) {
                             piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
                         }
                     } else {
-                        if (enemy.possibleMoves.some(m => m.samePosition(clonedKing.position && clonedretiredKing.position))) {
+                        if (enemy.possibleMoves.some(m => m.samePosition(clonedKing.position ))) {
                             piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
                         }
+                        
                     }
             
                 }
             }
         }
-    }
+    
+}
 
     getValidMoves(piece: Piece, boardState: Piece[]): Position[] {
         switch (piece.type) {
@@ -102,7 +104,7 @@ export class Board {
                 return getPossibleQueenMoves(piece, boardState);
             case PieceType.KING: 
             if ( this.totalTurns >= 10) {
-                return getPossibleRetiredKingMoves(piece, boardState);
+                return getPossibleRetiredKingMoves(piece, boardState) ;
             } 
                 return getPossibleKingMoves(piece, boardState);
              case PieceType.PRINCE:
@@ -121,7 +123,7 @@ export class Board {
         }
         
     }
-
+   
     playMove(enPassantMove: boolean,
         validMove: boolean,
         playedPiece: Piece,

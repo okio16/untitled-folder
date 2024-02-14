@@ -32,6 +32,7 @@ export class Board {
         }
 
         // Check if the current team moves are valid
+        
         this.checkCurrentTeamMoves();
 
         // Remove the posibble moves for the team that is not playing
@@ -52,44 +53,37 @@ export class Board {
         // Loop through all the current team's pieces
         for (const piece of this.pieces.filter(p => p.team === this.currentTeam)) {
             if (piece.possibleMoves === undefined) continue;
-
+    
             // Simulate all the piece moves
             for (const move of piece.possibleMoves) {
                 const simulatedBoard = this.clone();
-
+    
                 // Remove the piece at the destination position
                 simulatedBoard.pieces = simulatedBoard.pieces.filter(p => !p.samePosition(move));
-
+    
                 // Get the piece of the cloned board
                 const clonedPiece = simulatedBoard.pieces.find(p => p.samePiecePosition(piece))!;
                 clonedPiece.position = move.clone();
-
+    
                 // Get the king of the cloned board
                 const clonedKing = simulatedBoard.pieces.find(p => p.isKing && p.team === simulatedBoard.currentTeam)!;
-                const clonedretiredKing = simulatedBoard.pieces.find(p => p.isRetiredKing && p.team === simulatedBoard.currentTeam)!;
+                const clonedRetiredKing = simulatedBoard.pieces.find(p => p.isRetiredKing && p.team === simulatedBoard.currentTeam)!;
+                
                 // Loop through all enemy pieces, update their possible moves
                 // And check if the current team's king will be in danger
                 for (const enemy of simulatedBoard.pieces.filter(p => p.team !== simulatedBoard.currentTeam)) {
                     enemy.possibleMoves = simulatedBoard.getValidMoves(enemy, simulatedBoard.pieces);
-               
-                    if (enemy.isPawn) {
-                        if (enemy.possibleMoves.some(m => m.x !== enemy.position.x
-                            && m.samePosition(clonedKing.position && clonedretiredKing.position ))) {
-                            piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
-                        }
-                    } else {
-                        if (enemy.possibleMoves.some(m => m.samePosition(clonedKing.position ))) {
-                            piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
-                        }
-                        
+                    const kingToCheck = this.totalTurns >= 10 ? clonedRetiredKing : clonedKing;
+    
+                    if (enemy.possibleMoves.some(m => m.samePosition(kingToCheck.position))) {
+                        piece.possibleMoves = piece.possibleMoves?.filter(m => !m.samePosition(move));
                     }
-            
                 }
             }
         }
+        
+    }
     
-}
-
     getValidMoves(piece: Piece, boardState: Piece[]): Position[] {
         switch (piece.type) {
             case PieceType.PAWN:
@@ -102,27 +96,17 @@ export class Board {
                 return getPossibleRookMoves(piece, boardState);
             case PieceType.QUEEN:
                 return getPossibleQueenMoves(piece, boardState);
-            case PieceType.KING: 
-            if ( this.totalTurns >= 10) {
-                return getPossibleRetiredKingMoves(piece, boardState) ;
-            } 
-                return getPossibleKingMoves(piece, boardState);
-             case PieceType.PRINCE:
-                if ( this.totalTurns >= 10) {
-                    return getPossibleKingMoves(piece, boardState);
-                } 
-                    return getPossiblePrinceMoves(piece, boardState); 
-    
-              case PieceType.PRINCESS:
-                    if (this.totalTurns >= 10) {
-                        return getPossibleQueenMoves(piece, boardState);
-                    } 
-                     return getPossiblePrincessMoves(piece, boardState);
+            case PieceType.KING:
+                return this.totalTurns >= 10 ? getPossibleRetiredKingMoves(piece, boardState) : getPossibleKingMoves(piece, boardState);
+            case PieceType.PRINCE:
+                return this.totalTurns >= 10 ? getPossibleKingMoves(piece, boardState) : getPossiblePrinceMoves(piece, boardState);
+            case PieceType.PRINCESS:
+                return this.totalTurns >= 10 ? getPossibleQueenMoves(piece, boardState) : getPossiblePrincessMoves(piece, boardState);
             default:
                 return [];
         }
-        
     }
+    
    
     playMove(enPassantMove: boolean,
         validMove: boolean,

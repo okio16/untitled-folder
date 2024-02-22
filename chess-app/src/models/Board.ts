@@ -85,29 +85,59 @@ export class Board {
     }
     
     getValidMoves(piece: Piece, boardState: Piece[]): Position[] {
-        switch (piece.type) {
-            case PieceType.PAWN:
-                return getPossiblePawnMoves(piece, boardState);
-            case PieceType.KNIGHT:
-                return getPossibleKnightMoves(piece, boardState);
-            case PieceType.BISHOP:
-                return getPossibleBishopMoves(piece, boardState);
-            case PieceType.ROOK:
-                return getPossibleRookMoves(piece, boardState);
-            case PieceType.QUEEN:
-                return getPossibleQueenMoves(piece, boardState);
-            case PieceType.KING:
-                return this.totalTurns >= 10 ? getPossibleRetiredKingMoves(piece, boardState) : getPossibleKingMoves(piece, boardState);
-            case PieceType.PRINCE:
-                return this.totalTurns >= 10 ? getPossibleKingMoves(piece, boardState) : getPossiblePrinceMoves(piece, boardState);
-            case PieceType.PRINCESS:
-                return this.totalTurns >= 10 ? getPossibleQueenMoves(piece, boardState) : getPossiblePrincessMoves(piece, boardState);
-            default:
-                return [];
+        const prince = boardState.find(p => p.type === PieceType.PRINCE);
+        const king = boardState.find(p => p.type === PieceType.KING);
+    
+        if (prince && this.totalTurns >= 10) {
+            // If there is a prince on the board and it's after the 10th move
+            switch (piece.type) {
+                case PieceType.PAWN:
+                    return getPossiblePawnMoves(piece, boardState);
+                case PieceType.KNIGHT:
+                    return getPossibleKnightMoves(piece, boardState);
+                case PieceType.BISHOP:
+                    return getPossibleBishopMoves(piece, boardState);
+                case PieceType.ROOK:
+                    return getPossibleRookMoves(piece, boardState);
+                case PieceType.QUEEN:
+                    return getPossibleQueenMoves(piece, boardState);
+                case PieceType.PRINCE:
+                    return getPossiblePrinceMoves(piece, boardState);
+                case PieceType.PRINCESS:
+                    return getPossiblePrincessMoves(piece, boardState);
+                default:
+                    return [];
+            }
+        } else {
+            // If there is no prince on the board or it's before the 10th move
+            switch (piece.type) {
+                case PieceType.PAWN:
+                    return getPossiblePawnMoves(piece, boardState);
+                case PieceType.KNIGHT:
+                    return getPossibleKnightMoves(piece, boardState);
+                case PieceType.BISHOP:
+                    return getPossibleBishopMoves(piece, boardState);
+                case PieceType.ROOK:
+                    return getPossibleRookMoves(piece, boardState);
+                case PieceType.QUEEN:
+                    return getPossibleQueenMoves(piece, boardState);
+                case PieceType.KING:
+                    if (king) {
+                        return this.totalTurns >= 10 ? getPossibleRetiredKingMoves(piece, boardState) : getPossibleKingMoves(piece, boardState);
+                    } else {
+                        // If there is no prince and no king, return empty moves
+                        return [];
+                    }
+                case PieceType.PRINCE:
+                    return [];
+                case PieceType.PRINCESS:
+                    return [];
+                default:
+                    return [];
+            }
         }
     }
     
-   
     playMove(enPassantMove: boolean,
         validMove: boolean,
         playedPiece: Piece,

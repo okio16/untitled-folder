@@ -1,3 +1,4 @@
+import React from "react";
 import "./Tile.css";
 
 interface Props {
@@ -5,16 +6,19 @@ interface Props {
   number: number;
   highlight: boolean;
   names?: string;
+  tileColor: string; // Add tileColor prop
 }
 
-export default function Tile({ number, names, highlight,image  }: Props) {
-  const className: string = ["tile",
-    number % 2 === 0 && "black-tile",
-    number % 2 !== 0 && "white-tile",
+export default function Tile({ number, names, highlight, image, tileColor }: Props) {
+  const className: string = [
+    "tile",
+    tileColor, // Add tileColor to the class names
     highlight && "tile-highlight",
-    names ,
-    image && "chess-piece-tile"].filter(Boolean).join(' ');
-
+    names,
+    image && "chess-piece-tile",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className={className}>
